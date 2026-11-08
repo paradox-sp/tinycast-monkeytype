@@ -1,6 +1,7 @@
 {
   "name": "monkeytype-unoffical",
   "version": "1.0.0",
+  "license": "MIT",
   "private": true,
   "title": "monkeytype-unoffical",
   "description": "Practice typing in a dedicated native window, with quotes, timed sessions, and results.",

@@ -34,6 +34,10 @@ Push a tag matching `package.json` (for example, `v1.0.0`) to build and publish 
 - [Architecture and scoring](docs/architecture.md)
 - [Development, installation, and verification](docs/development.md)
 
+## License
+
+Project code: [MIT](LICENSE). Bundled JetBrains Mono: [SIL OFL 1.1](assets/fonts/OFL.txt).
+
 **Author:** [paradox-sp](https://github.com/paradox-sp). Report problems in [Issues](https://github.com/paradox-sp/tinycast-monkeytype/issues).
 
 Not affiliated with Monkeytype or Tinycast.
