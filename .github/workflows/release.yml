@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: macos-26
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      RELEASE_TAG: ${{ github.ref_name }}
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "22"
+          package-manager-cache: false
+
+      - name: Check tag matches package version
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from "node:fs";
+          const { version } = JSON.parse(readFileSync("package.json", "utf8"));
+          if (process.env.RELEASE_TAG !== `v${version}`) {
+            throw new Error(`Release tag must be v${version}; got ${process.env.RELEASE_TAG}.`);
+          }
+          NODE
+
+      - name: Test
+        run: npm test
+
+      - name: Build universal release package
+        run: npm run release
+
+      - name: Verify extracted release package
+        run: |
+          /usr/bin/ditto -x -k release/*.zip "$RUNNER_TEMP/release-check"
+          app="$RUNNER_TEMP/release-check/dist/assets/monkeytype-unoffical.app"
+          /usr/bin/codesign --verify --deep --strict --verbose=2 "$app"
+          architectures=$(/usr/bin/lipo -archs "$app/Contents/MacOS/monkeytype-unoffical")
+          for arch in arm64 x86_64; do
+            case " $architectures " in
+              *" $arch "*) ;;
+              *) echo "::error::Release binary is missing $arch"; exit 1 ;;
+            esac
+          done
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          options=()
+          if [[ "$RELEASE_TAG" == *-* ]]; then
+            options+=(--prerelease)
+          fi
+          gh release create "$RELEASE_TAG" release/*.zip \
+            --repo "$GITHUB_REPOSITORY" \
+            --verify-tag \
+            --title "$RELEASE_TAG" \
+            --generate-notes \
+            "${options[@]}"

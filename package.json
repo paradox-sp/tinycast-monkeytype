@@ -1,0 +1,35 @@
+{
+  "name": "monkeytype-unoffical",
+  "version": "1.0.0",
+  "private": true,
+  "title": "monkeytype-unoffical",
+  "description": "Practice typing in a dedicated native window, with quotes, timed sessions, and results.",
+  "author": "paradox-sp",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paradox-sp/tinycast-monkeytype.git"
+  },
+  "homepage": "https://github.com/paradox-sp/tinycast-monkeytype#readme",
+  "bugs": {
+    "url": "https://github.com/paradox-sp/tinycast-monkeytype/issues"
+  },
+  "icon": "icon.svg",
+  "categories": ["Productivity"],
+  "platforms": ["macOS"],
+  "commands": [
+    {
+      "name": "start-typing-practice",
+      "title": "Start monkeytype-unoffical",
+      "description": "Open the monkeytype-unoffical practice window.",
+      "mode": "no-view",
+      "keywords": ["typing", "practice", "wpm", "quotes"]
+    }
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "release": "node scripts/build.mjs --release",
+    "dev": "open dist/assets/monkeytype-unoffical.app",
+    "test": "node --test tests/*.test.js",
+    "smoke": "dist/assets/monkeytype-unoffical.app/Contents/MacOS/monkeytype-unoffical --smoke"
+  }
+}

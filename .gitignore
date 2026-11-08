@@ -1,0 +1,6 @@
+dist/
+release/
+/start-typing-practice.js
+/assets/monkeytype-unoffical.app/
+.monkeytype-unoffical-build-*/
+.DS_Store
