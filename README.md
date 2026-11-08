@@ -2,6 +2,8 @@
 
 A Monkeytype-powered **typing practice extension for [Tinycast](https://tinycast.dev/)**. Practice quotes or timed sessions in a native macOS window.
 
+![Typing practice window](docs/images/typing-practice.png)
+
 ## Install in Tinycast
 
 Requires macOS 26+, Tinycast, and internet access.
